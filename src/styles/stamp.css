@@ -1,0 +1,202 @@
+:root {
+  --primary: #f89c3e;
+  --bg: #fdfaf6;
+  --text: #222;
+  --subtext: #888;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Pretendard', sans-serif;
+  background-color: var(--bg);
+}
+
+.stamp-page {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.stamp-container {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* 공통 카드 */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* 입력 */
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.input-row button {
+  padding: 0.6rem 1rem;
+  background-color: var(--primary);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* 유저 정보 */
+.user-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #ccc;
+}
+
+.user-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.issue-status {
+  color: green;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* 진행 바 */
+.progress-row {
+  margin-bottom: 1rem;
+}
+
+.progress-label {
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 0.3rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+}
+
+.progress-tip {
+  font-size: 0.8rem;
+  color: var(--subtext);
+}
+
+/* 버튼 그룹 */
+.btn-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  cursor: pointer;
+  border: none;
+}
+
+.btn.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn.outline {
+  background: #fff5e9;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+/* 히스토리 리스트 */
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-list li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.count {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+/* 반응형 */
+@media (min-width: 768px) {
+  .stamp-container {
+    max-width: 600px;
+  }
+
+  .card {
+    padding: 2rem;
+  }
+
+  .btn {
+    font-size: 1.1rem;
+  }
+
+  .input-row input {
+    font-size: 1.1rem;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+  }
+}
