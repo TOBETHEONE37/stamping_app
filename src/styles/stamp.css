@@ -14,10 +14,37 @@ body {
   background-color: var(--bg);
 }
 
+/* 페이지 및 컨테이너 */
 .stamp-page {
   padding: 1rem;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stamp-header {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.store-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .stamp-container {
@@ -28,7 +55,7 @@ body {
   gap: 1.5rem;
 }
 
-/* 공통 카드 */
+/* 카드 공통 */
 .card {
   background: white;
   border-radius: var(--radius);
@@ -42,7 +69,7 @@ body {
   margin-bottom: 1rem;
 }
 
-/* 입력 */
+/* 입력 영역 */
 .input-row {
   display: flex;
   gap: 0.5rem;
@@ -198,5 +225,13 @@ body {
 
   .card-title {
     font-size: 1.5rem;
+  }
+
+  .store-name {
+    font-size: 1.5rem;
+  }
+
+  .logout-btn {
+    font-size: 1.1rem;
   }
 }
