@@ -205,6 +205,24 @@ body {
   color: var(--primary);
 }
 
+.select-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.select-row label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.select-row select {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
 /* 반응형 */
 @media (min-width: 768px) {
   .stamp-container {
