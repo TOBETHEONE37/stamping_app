@@ -1,24 +1,39 @@
-# Logs
-logs
+# Node & Yarn
+node_modules/
+.yarn/
+.pnp.*
+.yarnrc.yml
+
+# Vite 빌드
+dist/
+.vite/
+
+# 환경변수
+.env
+.env.*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# 테스트 / 커버리지
+coverage/
 *.log
+
+# Log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# 운영체제 & 에디터 파일
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+.idea/
+.vscode/
+Thumbs.db
+
+# Vercel
+.vercel/
+
+
+yarn.lock
+package-lock.json
