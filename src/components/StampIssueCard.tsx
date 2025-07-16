@@ -20,7 +20,6 @@ const StampIssueCard = ({ stampRallyId }: StampIssueCardProps) => {
   const [loading, setLoading] = useState(false);
 
   const selectedUser = users.find((user) => user.userId === selectedUserId);
-  const isStampDisabled = !selectedUser || selectedUser.stampRallyId !== null;
 
   const noTourSelected = stampRallyId === null;
 
