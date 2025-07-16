@@ -6,12 +6,20 @@ import apiClient from "@/api/client";
 import { useEffect, useState } from "react";
 import StampTourSelect from "@/components/StampTourSelect";
 
+export interface TodayStampRecord {
+  name: string;
+  createdAt: string;
+  stampCount: number;
+}
+
 const StampPage = () => {
   const navigate = useNavigate();
   const [storeId, setStoreId] = useState<number | null>(null);
   const [storeNm, setStoreNm] = useState("");
   const [selectedTourId, setSelectedTourId] = useState<number | null>(null);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
+
+  const [records, setRecords] = useState<TodayStampRecord[]>([]); // 발급 내역
 
   useEffect(() => {
 
@@ -25,6 +33,8 @@ const StampPage = () => {
         setStoreId(storeId);
         setStoreNm(storeNm);
         setIsCheckingSession(false);
+
+        fetchStampHistory(storeId);
       } catch (err) {
         navigate("/login");
       }
@@ -35,11 +45,6 @@ const StampPage = () => {
 
   }, [navigate]);
 
-  // avoid flickering
-  if (isCheckingSession) {
-    return null;
-  }
-
   const handleLogout = async () => {
     try {
       await apiClient.post("/api/auth/stamp/logout", null, { withCredentials: true });
@@ -48,6 +53,20 @@ const StampPage = () => {
       console.error("로그아웃 실패", err);
     }
   };
+
+  const fetchStampHistory = async (storeId: number) => {
+    try {
+      const res = await apiClient.get<TodayStampRecord[]>(
+        `/api/stamp/rally/user/today?storeId=${storeId}`
+      );
+      setRecords(res.data);
+    } catch (err) {
+      console.error("발급 내역 조회 실패", err);
+    }
+  };
+
+  // avoid flickering
+  if (isCheckingSession) return null;
 
   return (
     <div className="stamp-page">
@@ -62,8 +81,15 @@ const StampPage = () => {
           selectedTourId={selectedTourId}
           setSelectedTourId={setSelectedTourId}
         />
-        <StampIssueCard stampRallyId={selectedTourId} />
-        <StampHistoryList />
+        {/* 검색 및 스탬프 발급 */}
+        <StampIssueCard 
+          stampRallyId={selectedTourId}
+          onIssueSuccess={() => {
+            if (storeId) fetchStampHistory(storeId); // ← 여기서 재조회!
+          }}
+        />
+        {/* 발급 내역 */}
+        <StampHistoryList records={records} />
       </div>
     </div>
   );

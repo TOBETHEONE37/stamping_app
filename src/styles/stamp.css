@@ -215,11 +215,25 @@ body {
 }
 
 .history-list li {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto auto; /* 이름 / 시간 / 수량 */
+  gap: 0.5rem;
+  align-items: center;
   font-size: 0.95rem;
   padding: 0.6rem 0;
   border-top: 1px solid #f0f0f0;
+}
+
+.history-list li span:nth-child(2) {
+  text-align: center;
+  color: var(--subtext);
+  font-size: 0.9rem;
+}
+
+.history-list li span.count {
+  text-align: right;
+  font-weight: bold;
+  color: var(--primary);
 }
 
 .count {

@@ -1,8 +1,10 @@
 import apiClient from "@/api/client";
 import { useState } from "react";
+import AlertModal from "./AlertModal";
 
 interface StampIssueCardProps {
   stampRallyId: number | null;
+  onIssueSuccess?: () => void;
 }
 
 interface User {
@@ -12,12 +14,14 @@ interface User {
   stampRallyId: number | null;
 }
 
-const StampIssueCard = ({ stampRallyId }: StampIssueCardProps) => {
+const StampIssueCard = ({ stampRallyId, onIssueSuccess }: StampIssueCardProps) => {
   const [searchValue, setSearchValue] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isIssuing, setIsIssuing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const selectedUser = users.find((user) => user.userId === selectedUserId);
 
@@ -44,6 +48,30 @@ const StampIssueCard = ({ stampRallyId }: StampIssueCardProps) => {
       setUsers([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleIssueStamp = async () => {
+    if (!stampRallyId || !selectedUser) return;
+
+    setIsIssuing(true);
+
+    try {
+      await apiClient.post("/api/stamp/rally/user", {
+        stampRallyId,
+        userId: selectedUser.userId,
+      },
+      {
+        withCredentials: true,
+      });
+
+      setShowModal(true);
+      handleSearch();
+      onIssueSuccess?.();
+    } catch (err) {
+      console.error("스탬프 발급 실패", err);
+    } finally {
+      setIsIssuing(false);
     }
   };
 
@@ -79,7 +107,6 @@ const StampIssueCard = ({ stampRallyId }: StampIssueCardProps) => {
         {!noTourSelected && loading && (
           <div className="loading-box">
             <div className="spinner" />
-            <div className="loading-text">조회 중입니다...</div>
           </div>
         )}
 
@@ -115,22 +142,23 @@ const StampIssueCard = ({ stampRallyId }: StampIssueCardProps) => {
         )}
       </div>
 
-      {!loading && !noTourSelected && (
+      {!loading && !noTourSelected && searched && (
         <div className="btn-group">
           <button
             className="btn primary"
-            disabled={!selectedUser || selectedUser.stampRallyId !== null}
+            disabled={!selectedUser || selectedUser.stampRallyId !== null || isIssuing}
+            onClick={handleIssueStamp}
           >
             +1 스탬프
           </button>
-          {/* <button
-            className="btn outline"
-            disabled={!selectedUser || selectedUser.stampRallyId !== null}
-          >
-            +2 스탬프
-          </button> */}
         </div>
       )}
+
+      <AlertModal
+        isOpen={showModal}
+        message="스탬프가 성공적으로 발급되었습니다."
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };
