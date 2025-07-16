@@ -14,6 +14,7 @@ const StampPage = () => {
   const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   useEffect(() => {
+
     const checkSession = async () => {
       try {
         const res = await apiClient.get("/api/auth/stamp/session-check", {
@@ -29,9 +30,12 @@ const StampPage = () => {
       }
     };
 
+    // login check
     checkSession();
+
   }, [navigate]);
 
+  // avoid flickering
   if (isCheckingSession) {
     return null;
   }
@@ -58,7 +62,7 @@ const StampPage = () => {
           selectedTourId={selectedTourId}
           setSelectedTourId={setSelectedTourId}
         />
-        <StampIssueCard />
+        <StampIssueCard stampRallyId={selectedTourId} />
         <StampHistoryList />
       </div>
     </div>
