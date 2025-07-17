@@ -25,9 +25,7 @@ const StampPage = () => {
 
     const checkSession = async () => {
       try {
-        const res = await apiClient.get("/api/auth/stamp/session-check", {
-          withCredentials: true,
-        });
+        const res = await apiClient.get("/api/auth/stamp/session-check");
 
         const { storeId, storeNm } = res.data;
         setStoreId(storeId);
@@ -50,7 +48,7 @@ const StampPage = () => {
 
   const handleLogout = async () => {
     try {
-      await apiClient.post("/api/auth/stamp/logout", null, { withCredentials: true });
+      await apiClient.post("/api/auth/stamp/logout", null);
       navigate("/login");
     } catch (err) {
       console.error("로그아웃 실패", err);

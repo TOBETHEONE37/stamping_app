@@ -23,11 +23,7 @@ const LoginPage = () => {
     try {
       setLoading(true);
 
-      await apiClient.post(
-        "/api/auth/stamp/login",
-        { businessNumber: bizNo },
-        { withCredentials: true }
-      );
+      await apiClient.post("/api/auth/stamp/login", { businessNumber: bizNo });
 
       navigate("/stamp");
     } catch (err: unknown) {

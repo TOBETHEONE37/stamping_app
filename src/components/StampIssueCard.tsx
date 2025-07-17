@@ -60,9 +60,6 @@ const StampIssueCard = ({ stampRallyId, onIssueSuccess }: StampIssueCardProps) =
       await apiClient.post("/api/stamp/rally/user", {
         stampRallyId,
         userId: selectedUser.userId,
-      },
-      {
-        withCredentials: true,
       });
 
       setShowModal(true);
