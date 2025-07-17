@@ -26,15 +26,8 @@ const LoginPage = () => {
           withCredentials: true,
         }
       );
-
-      // ✅ 응답 헤더 alert로 표시
-      alert("✅ 로그인 성공!\n\n" + JSON.stringify(res.headers, null, 2));
-
       navigate("/stamp");
     } catch (err: any) {
-      // ✅ 에러 상세 alert 출력
-      alert("❌ 로그인 실패!\n\n" + JSON.stringify(err.response?.data || err, null, 2));
-
       setError("존재하지 않는 사업자번호입니다.");
     } finally {
       setLoading(false);
