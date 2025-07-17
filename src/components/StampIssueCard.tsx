@@ -97,7 +97,7 @@ const StampIssueCard = ({ stampRallyId, onIssueSuccess }: StampIssueCardProps) =
 
       <div className="user-select-list">
         {noTourSelected && (
-          <div className="placeholder">투어를 먼저 선택해주세요</div>
+          <div className="placeholder">투어를 선택해주세요</div>
         )}
 
         {!noTourSelected && !searched && !loading && (
