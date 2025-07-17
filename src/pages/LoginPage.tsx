@@ -17,7 +17,8 @@ const LoginPage = () => {
 
     try {
       setLoading(true);
-      const res = await apiClient.post(
+      
+      await apiClient.post(
         "/api/auth/stamp/login",
         {
           businessNumber: bizNo,
@@ -26,6 +27,7 @@ const LoginPage = () => {
           withCredentials: true,
         }
       );
+      
       navigate("/stamp");
     } catch (err: any) {
       setError("존재하지 않는 사업자번호입니다.");
