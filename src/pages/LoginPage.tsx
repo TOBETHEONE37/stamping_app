@@ -22,19 +22,18 @@ const LoginPage = () => {
 
     try {
       setLoading(true);
-      
+
       await apiClient.post(
         "/api/auth/stamp/login",
-        {
-          businessNumber: bizNo,
-        },
-        {
-          withCredentials: true,
-        }
+        { businessNumber: bizNo },
+        { withCredentials: true }
       );
 
       navigate("/stamp");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Login error:", err.message);
+      }
       setError("존재하지 않는 사업자번호입니다.");
     } finally {
       setLoading(false);

@@ -35,7 +35,10 @@ const StampPage = () => {
         setIsCheckingSession(false);
 
         fetchStampHistory(storeId);
-      } catch (err) {
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Session check failed:", err.message);
+        }
         navigate("/login");
       }
     };
@@ -82,7 +85,7 @@ const StampPage = () => {
           setSelectedTourId={setSelectedTourId}
         />
         {/* 검색 및 스탬프 발급 */}
-        <StampIssueCard 
+        <StampIssueCard
           stampRallyId={selectedTourId}
           onIssueSuccess={() => {
             if (storeId) fetchStampHistory(storeId); // ← 여기서 재조회!
