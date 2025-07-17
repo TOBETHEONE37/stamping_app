@@ -5,6 +5,7 @@ import "../styles/login.css";
 
 const LoginPage = () => {
   const [bizNo, setBizNo] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -23,7 +24,10 @@ const LoginPage = () => {
     try {
       setLoading(true);
 
-      await apiClient.post("/api/auth/stamp/login", { businessNumber: bizNo });
+      await apiClient.post("/api/auth/stamp/login", {
+        businessNumber: bizNo,
+        password: password,
+      });
 
       navigate("/stamp");
     } catch (err: unknown) {
@@ -47,6 +51,12 @@ const LoginPage = () => {
           value={bizNo}
           onChange={(e) => setBizNo(e.target.value)}
           maxLength={10}
+        />
+        <input
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         {error && <div className="error-text">{error}</div>}
         <button onClick={handleLogin} disabled={loading || bizNo.length < 10}>
