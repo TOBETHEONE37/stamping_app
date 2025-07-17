@@ -6,15 +6,14 @@
   --radius: 12px;
 }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
-
 body {
   margin: 0;
   font-family: 'Pretendard', sans-serif;
   background-color: var(--bg);
+}
+
+body.no-scroll {
+  overflow: hidden;
 }
 
 .login-wrapper {

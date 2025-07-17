@@ -1,5 +1,5 @@
 import apiClient from "@/api/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 
@@ -8,6 +8,11 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.classList.add("no-scroll");
+    return () => document.body.classList.remove("no-scroll");
+  }, []);
 
   const handleLogin = async () => {
     if (bizNo.length < 10) {
@@ -27,7 +32,7 @@ const LoginPage = () => {
           withCredentials: true,
         }
       );
-      
+
       navigate("/stamp");
     } catch (err: any) {
       setError("존재하지 않는 사업자번호입니다.");
