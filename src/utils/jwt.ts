@@ -4,7 +4,6 @@ export interface JwtPayload {
   businessNumber: string;
   iat?: number;
   exp?: number;
-  [key: string]: any;
 }
 
 export function getAccessToken(): string | null {

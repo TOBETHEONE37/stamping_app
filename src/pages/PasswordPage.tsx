@@ -3,29 +3,45 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "@/api/client";
 import "../styles/password.css";
 import AlertModal from "@/components/AlertModal";
+import type { AxiosError } from "axios";
 
 const PasswordPage = () => {
   const navigate = useNavigate();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
 
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
-      document.body.classList.add("no-scroll");
-      return () => document.body.classList.remove("no-scroll");
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    document.body.classList.add("no-scroll");
+    setIsCheckingToken(false);
+    return () => document.body.classList.remove("no-scroll");
   }, []);
+
+  if (isCheckingToken) return null;
+
+  const showModal = (message: string) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+  };
 
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      alert("모든 항목을 입력해주세요.");
+      showModal("모든 항목을 입력해주세요.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      alert("새 비밀번호가 일치하지 않습니다.");
+      showModal("새 비밀번호가 일치하지 않습니다.");
       return;
     }
 
@@ -45,11 +61,10 @@ const PasswordPage = () => {
         }
       );
 
-      setAlertMessage("비밀번호가 변경되었습니다.");
-      setShowAlert(true);
-    } catch (err: any) {
-      setAlertMessage("변경 실패: " + (err.response?.data?.message || "알 수 없는 오류"));
-      setShowAlert(true);
+      showModal("비밀번호가 변경되었습니다.");
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      showModal((axiosError.response?.data?.message || "알 수 없는 오류"));
     }
   };
 

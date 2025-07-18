@@ -19,7 +19,7 @@ const StampPage = () => {
   const [storeId, setStoreId] = useState<number | null>(null);
   const [storeNm, setStoreNm] = useState("");
   const [selectedTourId, setSelectedTourId] = useState<number | null>(null);
-  const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
 
   const [records, setRecords] = useState<TodayStampRecord[]>([]); // 발급 내역
 
@@ -46,7 +46,7 @@ const StampPage = () => {
       } catch (e) {
         console.error("초기 발급내역 조회 실패", e);
       } finally {
-        setIsCheckingSession(false);
+        setIsCheckingToken(false);
       }
     };
 
@@ -71,7 +71,7 @@ const StampPage = () => {
   };
 
   // avoid flickering
-  if (isCheckingSession) return null;
+  if (isCheckingToken) return null;
 
   return (
     <div className="stamp-page">
