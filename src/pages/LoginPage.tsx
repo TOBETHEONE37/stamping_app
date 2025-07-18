@@ -1,8 +1,13 @@
 import apiClient from "@/api/client";
+import { decodeToken } from "@/utils/jwt";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
-import { decodeToken } from "@/utils/jwt";
+
+interface ErrorResponse {
+  message: string;
+}
 
 const LoginPage = () => {
   const [bizNo, setBizNo] = useState("");
@@ -37,18 +42,19 @@ const LoginPage = () => {
       const decoded = decodeToken(accessToken);
       if (!decoded) throw new Error("토큰 디코딩 실패");
 
-      // → storeId / storeNm 넘김
       navigate("/stamp", {
         state: {
           storeId: decoded.storeId,
           storeNm: decoded.storeNm,
         },
       });
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Login error:", err.message);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const errorData = err.response?.data as ErrorResponse;
+        setError(errorData?.message || "알 수 없는 오류 발생");
+      } else {
+        setError("알 수 없는 오류 발생");
       }
-      setError("존재하지 않는 사업자번호입니다.");
     } finally {
       setLoading(false);
     }
@@ -69,11 +75,15 @@ const LoginPage = () => {
         <input
           type="password"
           placeholder="비밀번호"
+          maxLength={16}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <div className="error-text">{error}</div>}
-        <button onClick={handleLogin} disabled={loading || bizNo.length < 10}>
+        <button
+          onClick={handleLogin}
+          disabled={loading || bizNo.length !== 10 || password.trim() === ""}
+        >
           {loading ? "확인 중..." : "로그인"}
         </button>
       </div>

@@ -6,6 +6,7 @@ import apiClient from "@/api/client";
 import { useEffect, useState } from "react";
 import StampTourSelect from "@/components/StampTourSelect";
 import { decodeToken } from "@/utils/jwt";
+import { IoLockClosedOutline, IoLogOutOutline } from "react-icons/io5";
 
 export interface TodayStampRecord {
   name: string;
@@ -76,7 +77,14 @@ const StampPage = () => {
     <div className="stamp-page">
       <div className="stamp-header">
         <h2 className="store-name">{storeNm || "-"}</h2>
-        <button className="logout-btn" onClick={handleLogout}>로그아웃</button>
+        <div className="header-actions">
+          <button className="icon-btn" title="비밀번호 변경" onClick={() => navigate("/password")}>
+            <IoLockClosedOutline size={22} />
+          </button>
+          <button className="icon-btn" title="로그아웃" onClick={handleLogout}>
+            <IoLogOutOutline size={22} />
+          </button>
+        </div>
       </div>
       <div className="stamp-container">
         {/* 투어 선택 박스 */}
@@ -88,6 +96,7 @@ const StampPage = () => {
         {/* 검색 및 스탬프 발급 */}
         <StampIssueCard
           stampRallyId={selectedTourId}
+          storeId={storeId}
           onIssueSuccess={() => {
             if (storeId) fetchStampHistory(storeId); // ← 여기서 재조회!
           }}

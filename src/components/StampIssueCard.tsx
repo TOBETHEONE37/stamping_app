@@ -4,6 +4,7 @@ import AlertModal from "./AlertModal";
 
 interface StampIssueCardProps {
   stampRallyId: number | null;
+  storeId: number | null;
   onIssueSuccess?: () => void;
 }
 
@@ -14,7 +15,7 @@ interface User {
   stampRallyId: number | null;
 }
 
-const StampIssueCard = ({ stampRallyId, onIssueSuccess }: StampIssueCardProps) => {
+const StampIssueCard = ({ stampRallyId, storeId, onIssueSuccess }: StampIssueCardProps) => {
   const [searchValue, setSearchValue] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
@@ -52,7 +53,7 @@ const StampIssueCard = ({ stampRallyId, onIssueSuccess }: StampIssueCardProps) =
   };
 
   const handleIssueStamp = async () => {
-    if (!stampRallyId || !selectedUser) return;
+    if (!stampRallyId || !selectedUser || !storeId) return;
 
     setIsIssuing(true);
 
@@ -60,6 +61,7 @@ const StampIssueCard = ({ stampRallyId, onIssueSuccess }: StampIssueCardProps) =
       await apiClient.post("/api/stamp/rally/user", {
         stampRallyId,
         userId: selectedUser.userId,
+        storeId,
       });
 
       setShowModal(true);
@@ -153,7 +155,7 @@ const StampIssueCard = ({ stampRallyId, onIssueSuccess }: StampIssueCardProps) =
 
       <AlertModal
         isOpen={showModal}
-        message="스탬프가 성공적으로 발급되었습니다."
+        message="스탬프가 발급되었습니다."
         onClose={() => setShowModal(false)}
       />
     </div>
