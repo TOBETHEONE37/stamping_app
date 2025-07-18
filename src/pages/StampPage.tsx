@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "@/api/client";
 import { useEffect, useState } from "react";
 import StampTourSelect from "@/components/StampTourSelect";
+import { decodeToken } from "@/utils/jwt";
 
 export interface TodayStampRecord {
   name: string;
@@ -22,37 +23,39 @@ const StampPage = () => {
   const [records, setRecords] = useState<TodayStampRecord[]>([]); // 발급 내역
 
   useEffect(() => {
+    const init = async () => {
+      const token = localStorage.getItem("accessToken");
 
-    const checkSession = async () => {
-      try {
-        const res = await apiClient.get("/api/auth/stamp/session-check");
-
-        const { storeId, storeNm } = res.data;
-        setStoreId(storeId);
-        setStoreNm(storeNm);
-        setIsCheckingSession(false);
-
-        fetchStampHistory(storeId);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          console.error("Session check failed:", err.message);
-        }
+      if (!token) {
         navigate("/login");
+        return;
+      }
+
+      const decoded = decodeToken(token);
+      if (!decoded || !decoded.storeId || !decoded.storeNm) {
+        navigate("/login");
+        return;
+      }
+
+      setStoreId(decoded.storeId);
+      setStoreNm(decoded.storeNm);
+
+      try {
+        await fetchStampHistory(decoded.storeId);
+      } catch (e) {
+        console.error("초기 발급내역 조회 실패", e);
+      } finally {
+        setIsCheckingSession(false);
       }
     };
 
-    // login check
-    checkSession();
-
+    init();
   }, [navigate]);
 
   const handleLogout = async () => {
-    try {
-      await apiClient.post("/api/auth/stamp/logout", null);
-      navigate("/login");
-    } catch (err) {
-      console.error("로그아웃 실패", err);
-    }
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    navigate("/login");
   };
 
   const fetchStampHistory = async (storeId: number) => {

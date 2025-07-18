@@ -2,6 +2,7 @@ import apiClient from "@/api/client";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
+import { decodeToken } from "@/utils/jwt";
 
 const LoginPage = () => {
   const [bizNo, setBizNo] = useState("");
@@ -24,12 +25,25 @@ const LoginPage = () => {
     try {
       setLoading(true);
 
-      await apiClient.post("/api/auth/stamp/login", {
+      const res = await apiClient.post("/api/auth/stamp/login", {
         businessNumber: bizNo,
         password: password,
       });
 
-      navigate("/stamp");
+      const { accessToken, refreshToken } = res.data;
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      const decoded = decodeToken(accessToken);
+      if (!decoded) throw new Error("토큰 디코딩 실패");
+
+      // → storeId / storeNm 넘김
+      navigate("/stamp", {
+        state: {
+          storeId: decoded.storeId,
+          storeNm: decoded.storeNm,
+        },
+      });
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Login error:", err.message);
