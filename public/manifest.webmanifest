@@ -1,0 +1,23 @@
+{
+  "name": "스탬핑 페이지",
+  "short_name": "스탬프 투어",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff7f1",
+  "theme_color": "#B67845",
+  "description": "스탬프 투어 상생매장 스탬핑 페이지",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
