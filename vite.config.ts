@@ -5,6 +5,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/",
   plugins: [
     react(),
     VitePWA({
@@ -20,7 +21,11 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, 'src')
+      "@": path.resolve(__dirname, './src')
     }
-  }
+  },
+  build: {
+    outDir: "dist",
+    sourcemap: true,
+  },
 })
