@@ -14,6 +14,10 @@ body {
   background-color: var(--bg);
 }
 
+input[type="date"] {
+  font-family: 'Pretendard', sans-serif;
+}
+
 /* 페이지 및 컨테이너 */
 .stamp-page {
   padding: 1rem;
@@ -154,7 +158,8 @@ body {
 .user-text {
   display: flex;
   flex-direction: column;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.3;
 }
 
 .issue-status {
@@ -217,6 +222,9 @@ body {
 .btn.primary {
   background: var(--primary);
   color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn.outline {
@@ -241,13 +249,12 @@ body {
 }
 
 .history-list li {
-  display: grid;
-  grid-template-columns: 1fr auto auto; /* 이름 / 시간 / 수량 */
-  gap: 0.5rem;
-  align-items: center;
-  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   padding: 0.6rem 0;
   border-top: 1px solid #f0f0f0;
+  gap: 0.5rem;
 }
 
 .history-list li span:nth-child(2) {
@@ -260,6 +267,13 @@ body {
   text-align: right;
   font-weight: bold;
   color: var(--primary);
+}
+
+.history-list li .time {
+  font-size: 0.9rem;
+  color: var(--subtext);
+  white-space: nowrap;
+  align-self: center;
 }
 
 .count {
@@ -304,6 +318,12 @@ body {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 2px rgba(248, 156, 62, 0.3);
+}
+
+.rally-name {
+  font-size: 0.85rem;
+  color: var(--subtext);
+  margin-top: 2px;
 }
 
 /* 로딩 */

@@ -148,7 +148,12 @@ const StampIssueCard = ({ stampRallyId, storeId, onIssueSuccess }: StampIssueCar
             disabled={!selectedUser || selectedUser.storeInfoId === storeId || isIssuing}
             onClick={handleIssueStamp}
           >
-            +1 스탬프
+            {isIssuing ? (
+                <div className="spinner" style={{ width: 18, height: 18 }} />
+              ) : (
+                "+1 스탬프"
+              )
+            }
           </button>
         </div>
       )}

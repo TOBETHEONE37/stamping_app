@@ -7,11 +7,13 @@ import { useEffect, useState } from "react";
 import StampTourSelect from "@/components/StampTourSelect";
 import { decodeToken } from "@/utils/jwt";
 import { IoLockClosedOutline, IoLogOutOutline } from "react-icons/io5";
+import dayjs from "dayjs";
 
 export interface TodayStampRecord {
   name: string;
   createdAt: string;
   stampCount: number;
+  stampRallyName: string;
 }
 
 const StampPage = () => {
@@ -19,7 +21,9 @@ const StampPage = () => {
   const [storeId, setStoreId] = useState<number | null>(null);
   const [storeNm, setStoreNm] = useState("");
   const [selectedTourId, setSelectedTourId] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [isCheckingToken, setIsCheckingToken] = useState(true);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   const [records, setRecords] = useState<TodayStampRecord[]>([]); // 발급 내역
 
@@ -42,7 +46,7 @@ const StampPage = () => {
       setStoreNm(decoded.storeNm);
 
       try {
-        await fetchStampHistory(decoded.storeId);
+        await handleSearch(decoded.storeId, selectedDate);
       } catch (e) {
         console.error("초기 발급내역 조회 실패", e);
       } finally {
@@ -59,18 +63,24 @@ const StampPage = () => {
     navigate("/login");
   };
 
-  const fetchStampHistory = async (storeId: number) => {
+  const handleDateChange = (value: string) => {
+    setSelectedDate(value);
+  };
+
+  const handleSearch = async (storeId: number, date: string) => {
+    setIsLoadingHistory(true);
     try {
       const res = await apiClient.get<TodayStampRecord[]>(
-        `/api/stamp/rally/user/today?storeId=${storeId}`
+        `/api/stamp/rally/user/history?storeId=${storeId}&date=${date}`
       );
       setRecords(res.data);
     } catch (err) {
       console.error("발급 내역 조회 실패", err);
+    } finally {
+      setIsLoadingHistory(false);
     }
   };
 
-  // avoid flickering
   if (isCheckingToken) return null;
 
   return (
@@ -98,11 +108,19 @@ const StampPage = () => {
           stampRallyId={selectedTourId}
           storeId={storeId}
           onIssueSuccess={() => {
-            if (storeId) fetchStampHistory(storeId);
+            if (storeId) handleSearch(storeId, selectedDate);
           }}
         />
         {/* 발급 내역 */}
-        <StampHistoryList records={records} />
+        <StampHistoryList
+          records={records}
+          selectedDate={selectedDate}
+          onChangeDate={handleDateChange}
+          onSearch={() => {
+            if (storeId) handleSearch(storeId, selectedDate);
+          }}
+          loading={isLoadingHistory}
+        />
       </div>
     </div>
   );
