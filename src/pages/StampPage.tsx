@@ -98,7 +98,7 @@ const StampPage = () => {
           stampRallyId={selectedTourId}
           storeId={storeId}
           onIssueSuccess={() => {
-            if (storeId) fetchStampHistory(storeId); // ← 여기서 재조회!
+            if (storeId) fetchStampHistory(storeId);
           }}
         />
         {/* 발급 내역 */}

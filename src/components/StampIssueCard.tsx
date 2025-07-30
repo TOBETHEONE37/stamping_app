@@ -11,8 +11,8 @@ interface StampIssueCardProps {
 interface User {
   userId: number;
   name: string;
-  lastVisit: string;
   stampRallyId: number | null;
+  storeInfoId: number | null;
 }
 
 const StampIssueCard = ({ stampRallyId, storeId, onIssueSuccess }: StampIssueCardProps) => {
@@ -116,7 +116,7 @@ const StampIssueCard = ({ stampRallyId, storeId, onIssueSuccess }: StampIssueCar
         {!noTourSelected && searched && !loading && users.length > 0 && (
           users.map((user) => {
             const isSelected = selectedUserId === user.userId;
-            const hasStamped = user.stampRallyId !== null;
+            const hasStamped = user.storeInfoId === storeId;
 
             return (
               <label key={user.userId} className="user-select-item">
@@ -145,7 +145,7 @@ const StampIssueCard = ({ stampRallyId, storeId, onIssueSuccess }: StampIssueCar
         <div className="btn-group">
           <button
             className="btn primary"
-            disabled={!selectedUser || selectedUser.stampRallyId !== null || isIssuing}
+            disabled={!selectedUser || selectedUser.storeInfoId === storeId || isIssuing}
             onClick={handleIssueStamp}
           >
             +1 스탬프
