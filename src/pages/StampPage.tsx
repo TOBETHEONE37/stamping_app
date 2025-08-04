@@ -1,9 +1,10 @@
 import StampIssueCard from "../components/StampIssueCard";
+import type { StampIssueCardRef } from "../components/StampIssueCard";
 import StampHistoryList from "../components/StampHistoryList";
 import "../styles/stamp.css";
 import { useNavigate } from "react-router-dom";
 import apiClient from "@/api/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import StampTourSelect from "@/components/StampTourSelect";
 import { decodeToken } from "@/utils/jwt";
 import { IoLockClosedOutline, IoLogOutOutline } from "react-icons/io5";
@@ -26,6 +27,7 @@ const StampPage = () => {
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   const [records, setRecords] = useState<TodayStampRecord[]>([]); // 발급 내역
+  const stampIssueCardRef = useRef<StampIssueCardRef | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -81,6 +83,14 @@ const StampPage = () => {
     }
   };
 
+  const handleTourChange = (tourId: number) => {
+    setSelectedTourId(tourId);
+    // StampIssueCard 초기화
+    if (stampIssueCardRef.current) {
+      stampIssueCardRef.current.reset();
+    }
+  };
+
   if (isCheckingToken) return null;
 
   return (
@@ -101,10 +111,11 @@ const StampPage = () => {
         <StampTourSelect
           storeId={storeId}
           selectedTourId={selectedTourId}
-          setSelectedTourId={setSelectedTourId}
+          setSelectedTourId={handleTourChange}
         />
         {/* 검색 및 스탬프 발급 */}
         <StampIssueCard
+          ref={stampIssueCardRef}
           stampRallyId={selectedTourId}
           storeId={storeId}
           onIssueSuccess={() => {
